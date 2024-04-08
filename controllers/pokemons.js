@@ -8,12 +8,20 @@ const getAll = async (req, res) => {
 
 const getById = async (req, res) => {
   const { id } = req.params;
-  const result = await Pokemon.findById(id);
+  const result = await Pokemon.findOne({ _id: id })
   if (!result) {
     throw HttpError(404, "not found");
   }
   res.json(result);
 };
+
+const addPokemon = async (req, res) => {
+
+        const result = await Pokemon.add(req.body);
+    
+        res.status(201).json(result);
+    
+}
 
 const updatePokemonById = async (req, res) => {
     const { id } = req.params;
@@ -21,33 +29,34 @@ const updatePokemonById = async (req, res) => {
   if (!result) {
     throw HttpError(404, "not found");
   }
-  // return result;
+
+  res.json(result);
+};
+const startToLoveThisPokemon = async (req, res) => {
+    const { id } = req.params;
+  const result = await Pokemon.findByIdAndUpdate(id, req.body, {new: true}); //{new: true} - чтобы возвращал новую версию
+  if (!result) {
+    throw HttpError(404, "not found");
+  }
+
   res.json(result);
 };
 
-// router.put('/:id', isValidId, async (req, res, next) => {
-//     try {
-//       const { error } = addSchema.validate(req.body);
+const removePokemon = async (req, res) => {
+    const { id } = req.params;
+    const result = await Contact.findByIdAndDelete(id)
+    if (!result) {
+        throw HttpError(404, "not found");
+      }
+    
+      res.json({message: 'Delete success'});
+}
 
-//       if (error) {
-//         throw HttpError(404, error.message);
-//       }
-
-//       const { id } = req.params;
-//       const result = await contacts.updateContact(id, req.body);
-
-//       if (!result) {
-//         throw HttpError(404, "Not found");
-//       }
-
-//       res.json(result);
-//     } catch (error) {
-//       next(error);
-//     }
-//   });
 
 module.exports = {
   getAll: ctrlWrapper(getAll),
   updatePokemonById: ctrlWrapper(updatePokemonById),
-  getById: ctrlWrapper(getById)
+  getById: ctrlWrapper(getById),
+  startToLoveThisPokemon: ctrlWrapper(startToLoveThisPokemon),
+  removePokemon: ctrlWrapper(removePokemon),
 };

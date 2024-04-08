@@ -1,11 +1,15 @@
 const express = require('express')
 const router = express.Router()
-const isValidId = require('../middlewares/isValidId')
+const {isValidId, validateBody }= require('../middlewares')
+const { schemas } = require('../models/pokemon')
+
 const ctrl = require('../controllers/pokemons')
 
 
 router.get('/', ctrl.getAll)
-router.put('/:id', isValidId, ctrl.updatePokemonById)
+router.get('/:id', ctrl.getById)
+router.put('/:id', isValidId, validateBody(schemas.addSchema), ctrl.updatePokemonById)
+router.patch('/:id', isValidId, validateBody(schemas.updateFavoriteSchema), ctrl.startToLoveThisPokemon)
 
 
 

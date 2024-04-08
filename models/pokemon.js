@@ -9,14 +9,19 @@ const addSchema = Joi.object({
     phone: Joi.string().required(),
   })
   
-//   const updateFavoriteSchema = Joi.object ({
-//     favorite: Joi.boolean().required(),
-//   })
+  const updateFavoriteSchema = Joi.object ({
+    favorite: Joi.boolean().required(),
+  })
 const schemas = {
     addSchema,
+    updateFavoriteSchema
 }
 
 const pokemonSchema = new Schema({   
+id: {
+    type: Number,
+    required: true
+},
 url: {
     type: String,
     required: true
